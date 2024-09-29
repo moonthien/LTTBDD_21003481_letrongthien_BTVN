@@ -3,7 +3,8 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const ProductScreen = () => {
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState('M'); // Kích thước mặc định
+    const [currentImage, setCurrentImage] = useState(require('../assets/DATA/Container 7 (3).png'));
     const [quantity, setQuantity] = useState(1);
     const price = 2.99;
 
@@ -16,7 +17,25 @@ const ProductScreen = () => {
     ];
 
     const handleItemPress = (id) => {
-        setSelectedItem(id);
+        const selectedItem = gridItems.find(item => item.id === id);
+        setCurrentImage(selectedItem.image);
+    };
+
+    const getImageSize = (size) => {
+        switch(size) {
+            case 'XS':
+                return { width: 180, height: 180 };
+            case 'S':
+                return { width: 200, height: 200 };
+            case 'M':
+                return { width: 220, height: 220 };
+            case 'L':
+                return { width: 240, height: 240 };
+            case 'XL':
+                return { width: 260, height: 260 };
+            default:
+                return { width: 220, height: 220 }; // Kích thước mặc định cho M
+        }
     };
 
     const increaseQuantity = () => {
@@ -44,10 +63,10 @@ const ProductScreen = () => {
     
     return (
         <View style={styles.container}>
-            <View style = {styles.productContainer}>
-                <View style = {styles.gridContainer}>
-                    <TouchableOpacity key = {gridItems[0].id} style = {styles.gridItemLarge}>
-                       <Image source={gridItems[0].image} style={styles.gridItemImageLarge}/>
+            <View style={styles.productContainer}>
+                <View style={styles.gridContainer}>
+                    <TouchableOpacity style={styles.gridItemLarge}>
+                       <Image source={currentImage} style={[styles.gridItemImageLarge, getImageSize(selectedItem)]}/>
                     </TouchableOpacity>
 
                     <View style={styles.smallGridContainer}>
@@ -60,13 +79,13 @@ const ProductScreen = () => {
                     <Text style={styles.offerText}>Buy 1 get 1</Text>
                 </View>
 
-                <View style = {styles.productDetailsContainer}>
-                    <Text style = {styles.productTitle}>Product Name</Text>
-                    <Text style = {styles.productSubtitle}>Occaecat est deserunt tempor offici</Text>
-                    <View style = {styles.ratingContainer}>
+                <View style={styles.productDetailsContainer}>
+                    <Text style={styles.productTitle}>Product Name</Text>
+                    <Text style={styles.productSubtitle}>Occaecat est deserunt tempor offici</Text>
+                    <View style={styles.ratingContainer}>
                         <Image
                             source={require('../assets/DATA/Rating 3.png')}
-                            style ={styles.starIcon}
+                            style={styles.starIcon}
                         />
                         <Text style={styles.ratingText}>4.5</Text>
                     </View>
@@ -74,10 +93,10 @@ const ProductScreen = () => {
 
                 <Text style={[styles.sectionTitle, {fontSize:20}]}>Size</Text>
                 <View style={styles.sizeContainer}>
-                    {['XS','S','M','L','XL'].map((size,index) => (
+                    {['XS', 'S', 'M', 'L', 'XL'].map((size, index) => (
                         <TouchableOpacity
                            key={index}
-                           style={[styles.sizeButton, size === 'XS' && styles.xsSizeButton, size === 'XL' && styles.xlSizeButton, selectedItem === size && styles.selectedSizeButton]}
+                           style={[styles.sizeButton, selectedItem === size && styles.selectedSizeButton]}
                            onPress={() => setSelectedItem(size)}
                         >
                            <Text style={styles.sizeButtonText}>{size}</Text>
@@ -247,8 +266,7 @@ const styles = StyleSheet.create({
     },
     sizeButtonText:{
         fontSize: 14,
-    },
-    quantityContainer:{
+    },    quantityContainer:{
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
@@ -326,7 +344,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
     },
     selectedGridItem:{
-        borderColor: '#00bfff',
+        borderColor: 'red',
         borderWidth: 2,
     },
     gridItemImage:{
@@ -335,4 +353,5 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
 });
+
 export default ProductScreen;

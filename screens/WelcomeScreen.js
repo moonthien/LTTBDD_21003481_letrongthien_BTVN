@@ -10,13 +10,13 @@ const WelcomeScreen = ({ navigation, route}) => {
     const [isFocusedPassword, setIsFocusedPassword] = useState(false);
 
     const handleLogin = () => {
-        const userFound = users.find(user => user.email === email && user.password === password);
-        if(userFound){
-            alert(`Welcome, ${userFound.userName}!`);
+        // const userFound = users.find(user => user.email === email && user.password === password);
+        // if(userFound){
+        //     alert(`Welcome, ${userFound.userName}!`);
             navigation.navigate('Product');
-        } else {
-            alert('Email hoặc password không hợp lệ');
-        }
+        // } else {
+        //     alert('Email hoặc password không hợp lệ');
+        // }
     };
 
     return (
